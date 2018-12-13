@@ -1,12 +1,15 @@
-import { EntryKey } from "./types";
+import { EntryKey } from './types';
+import { RopexStore } from './RopexStore';
 
 export class RopexIndex<Entry extends object, K extends EntryKey> {
+  constructor(private readonly ropexStore: RopexStore) {}
+
   // Getters
 
   /**
    * Get all the entries in this index
    */
-  getAll(): Entry[] {}
+  public getAll(): Entry[] {}
 
   /**
    * Return a meta-data field on the index
@@ -16,7 +19,7 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param key The meta-data field to look up
    * @param defaultVal Default value for the meta-data
    */
-  getMetaData<T>(key: string, defaultVal: T): T {}
+  public getMetaData<T>(key: string, defaultVal?: T): T {}
 
   // Setters
 
@@ -29,7 +32,7 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param entry New entry to set in this index
    * @param keyField What field on the object to use as the key
    */
-  setEntry(entry: Entry, keyField: string): RopexIndex {}
+  public setEntry(entry: Entry, keyField: string): RopexIndex {}
 
   /**
    * Replace the entries in this index
@@ -39,7 +42,7 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param entries New entries to set for this index
    * @param keyField What field on the object to use as the key
    */
-  setEntries(entries: Entry[], keyField: string): RopexIndex {}
+  public setEntries(entries: Entry[], keyField: string): RopexIndex {}
 
   /**
    * Add a new entry to the index
@@ -48,8 +51,9 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * the draft will be discarded
    *
    * @param entry New entry to add to the index
+   * @param keyField What field on the object to use as the key
    */
-  addEntry(entry: Entry): RopexIndex {}
+  public addEntry(entry: Entry, keyField: string): RopexIndex {}
 
   /**
    * Add new entries to this index
@@ -58,8 +62,9 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * the new entries, the drafts will be discarded.
    *
    * @param entries New entries to add to this index
+   * @param keyField What field on the object to use as the key
    */
-  addEntries(entries: Entry[]): RopexIndex {}
+  public addEntries(entries: Entry[], keyField: string): RopexIndex {}
 
   /**
    * Set a meta-data field
@@ -67,7 +72,7 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param key meta-data field key
    * @param value what to set the meta-data field as
    */
-  setMetaData<T>(key: string, value: T): RopexIndex {}
+  public setMetaData<T>(key: string, value: T): RopexIndex {}
 
   /**
    * Apply a map function to an entry
@@ -75,14 +80,14 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param key The key of the entry to apply the map function to
    * @param map Function to map an entry to another entry
    */
-  mapEntry(key: EntryKey, map: (entry: Entry) => Entry): RopexIndex {}
+  public mapEntry(key: EntryKey, map: (entry: Entry) => Entry): RopexIndex {}
 
   /**
    * Apply a map function to every entry in the index
    *
    * @param map Function to map an entry to another entry
    */
-  mapEntries(map: (entry: Entry) => Entry): RopexIndex {}
+  public mapEntries(map: (entry: Entry) => Entry): RopexIndex {}
 
   // Misc
 
@@ -91,15 +96,15 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    *
    * @param key The key of the index to lookup
    */
-  index(key: K): RopexIndex<Entry, K> {}
+  public index(key: K): RopexIndex<Entry, K> {}
 
   /**
    * Complete the current transaction and return the new state
    */
-  done(): RopexState {}
+  public done(): RopexState {}
 
   /**
    * Remove this index and return the parent {@link RopexStore}
    */
-  remove(): RopexStore {}
+  public remove(): RopexStore {}
 }

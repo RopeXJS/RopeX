@@ -1,8 +1,8 @@
-import { RopexState, EntryKey } from "./types";
-import { RopexStore } from "./RopexStore";
+import { RopexState, EntryKey } from './types';
+import { RopexStore } from './RopexStore';
 
-export function ropex<T, I extends EntryKey>(
-  state: RopexState<T, I>
+export function ropex<T extends object = {}, I extends EntryKey = string>(
+  state: RopexState<T, I>,
 ): RopexStore<T, I> {}
 
 export namespace ropex {
@@ -12,7 +12,7 @@ export namespace ropex {
   export function empty<T, I extends EntryKey>(): RopexState<T, I> {
     return {
       entries: {} as Record<I, T>,
-      indexes: {}
+      indexes: {},
     };
   }
 }
