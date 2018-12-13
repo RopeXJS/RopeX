@@ -9,10 +9,14 @@ export namespace ropex {
   /**
    * Create an empty ropex state
    */
-  export function empty<T, I extends EntryKey>(): RopexState<T, I> {
+  export function empty<T extends object, I extends EntryKey>(): RopexState<
+    T,
+    I
+  > {
     return {
       entries: {} as Record<I, T>,
       indexes: {},
+      drafts: {} as Record<I, T>,
     };
   }
 }

@@ -17,9 +17,12 @@ export type RopexStateIndex<M> = {
 /**
  * Indexed state
  */
-export type RopexState<T, I extends EntryKey = string> = {
+export type RopexState<T extends object, I extends EntryKey = string> = {
   /** The data entries */
   entries: Record<I, T>;
+
+  /** Draft data entries */
+  drafts: Record<I, T>;
 
   /** All the indexes */
   indexes: Record<string, RopexStateIndex<any>>;
