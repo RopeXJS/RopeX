@@ -1,0 +1,19 @@
+{
+  "name": "ropex",
+  "version": "1.0.0",
+  "description": "Indexed state manager",
+  "main": "index",
+  "types": "index",
+  "repository": "git@github.com:RopeXJS/RopeX.git",
+  "author": "RopeX Team",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@types/jest": "^23.3.10",
+    "jest": "^23.6.0",
+    "typedoc": "^0.13.0"
+  }
+}
