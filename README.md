@@ -1,0 +1,2 @@
+# RopeX
+Indexed state manager
