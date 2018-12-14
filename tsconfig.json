@@ -22,7 +22,7 @@
         "strictNullChecks": true,
         "suppressImplicitAnyIndexErrors": true,
         "target": "es6",
-        "types": ["jest"]
+        "types": ["node", "jest"]
     },
     "exclude": ["node_modules", "dist"],
     "include": ["./src/**/*"]
