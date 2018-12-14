@@ -63,6 +63,22 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * Run the garbage collector
    */
   public gc(): RopexStore<Entry, K> {
+    const usedEntries = ([] as K[]).concat(
+      ...Object.values(this.newState.indexes).map(index => index.keys),
+    );
+
+    for (const key of Object.keys(this.newState.entries)) {
+      if (!usedEntries.includes(key as K)) {
+        delete this.newState.entries[key];
+      }
+    }
+
+    for (const key of Object.keys(this.newState.drafts)) {
+      if (!usedEntries.includes(key as K)) {
+        delete this.newState.drafts[key];
+      }
+    }
+
     return this;
   }
 
