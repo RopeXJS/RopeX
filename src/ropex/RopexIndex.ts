@@ -61,6 +61,12 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param keyField What field on the object to use as the key
    */
   public setEntry(entry: Entry, keyField: string): RopexIndex<Entry, K> {
+    if (!this.checkEntryInIndex(entry[keyField])) {
+      return this;
+    }
+
+    this.ropexStore.setEntry(entry, keyField);
+
     return this;
   }
 
@@ -73,6 +79,16 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param keyField What field on the object to use as the key
    */
   public setEntries(entries: Entry[], keyField: string): RopexIndex<Entry, K> {
+    this.indexState.keys = [];
+
+    for (const entry of entries) {
+      const key = entry[keyField];
+
+      this.indexState.keys.push(key);
+
+      this.ropexStore.setEntry(entry, keyField);
+    }
+
     return this;
   }
 
@@ -120,15 +136,7 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param map Function to map an entry to another entry
    */
   public mapEntry(key: K, map: (entry: Entry) => Entry): RopexIndex<Entry, K> {
-    if (!this.indexState.keys.includes(key)) {
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(
-          `Trying to map entry with key "${key}" that's not in index "${
-            this.indexName
-          }"`,
-        );
-      }
-
+    if (!this.checkEntryInIndex(key)) {
       return this;
     }
 
@@ -173,5 +181,25 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    */
   public remove(): RopexStore<Entry, K> {
     return this.ropexStore.remove(this.indexName);
+  }
+
+  /**
+   * Return true if the entry key is in this index, false otherwise
+   *
+   * @param key Entry key to check
+   */
+  private checkEntryInIndex(key: K) {
+    if (!this.indexState.keys.includes(key)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(
+          `Trying to map entry with key "${key}" that's not in index "${
+            this.indexName
+          }"`,
+        );
+      }
+
+      return false;
+    }
+    return true;
   }
 }
