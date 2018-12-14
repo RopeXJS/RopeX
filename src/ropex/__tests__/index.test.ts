@@ -35,7 +35,7 @@ describe('Ropex', () => {
   });
 
   // getters
-  describe('.getAll()', () => {
+  describe('RopexIndex.getAll()', () => {
     it('Should get all entries in the index (merging in drafts)', () => {
       expect(
         ropex(baseState)
@@ -45,7 +45,7 @@ describe('Ropex', () => {
     });
   });
 
-  describe('.getMetaData', () => {
+  describe('RopexIndex.getMetaData', () => {
     const state = {
       ...baseState,
       indexes: {
@@ -84,7 +84,7 @@ describe('Ropex', () => {
   });
 
   // setters
-  describe('.setEntries()', () => {
+  describe('RopexIndex.setEntries()', () => {
     it('Should set all the entries of the index (and wipe the drafts)', () => {
       expect(
         ropex(ropex.empty())
@@ -98,7 +98,7 @@ describe('Ropex', () => {
     });
   });
 
-  describe('.setEntry()', () => {
+  describe('RopexIndex.setEntry()', () => {
     it('Should set a specific entry', () => {
       expect(
         ropex(baseState)
@@ -125,10 +125,10 @@ describe('Ropex', () => {
     });
   });
 
-  describe('.addEntries()', () => {
+  describe('RopexIndex.addEntries()', () => {
     it('Should add all the entries to the index', () => {
       expect(
-        ropex<Entry>({ ...baseState, entries: {} })
+        ropex<Entry, string>({ ...baseState, entries: {} })
           .index('index')
           .addEntries(entries, 'id')
           .done(),
@@ -139,10 +139,10 @@ describe('Ropex', () => {
     });
   });
 
-  describe('.addEntry()', () => {
+  describe('RopexIndex.addEntry()', () => {
     it('Should add a specific entry to the index', () => {
       expect(
-        ropex<Entry>({ ...baseState, entries: {} })
+        ropex<Entry, string>({ ...baseState, entries: {} })
           .index('index')
           .addEntry(entries[0], 'id')
           .done(),
@@ -150,7 +150,7 @@ describe('Ropex', () => {
     });
   });
 
-  describe('.setMetaData()', () => {
+  describe('RopexIndex.setMetaData()', () => {
     it('Should set the meta-data field of an index', () => {
       expect(
         ropex(baseState)
@@ -171,7 +171,7 @@ describe('Ropex', () => {
     });
   });
 
-  describe('.mapEntry()', () => {
+  describe('RopexIndex.mapEntry()', () => {
     it('Should update the entry and apply it to the state as a draft', () => {
       expect(
         ropex({ ...baseState, drafts: {} })
@@ -190,7 +190,7 @@ describe('Ropex', () => {
     });
   });
 
-  describe('.mapEntries()', () => {
+  describe('RopexIndex.mapEntries()', () => {
     it('Should update all entries in the index and add them to the state as drafts', () => {
       const state = {
         ...baseState,
@@ -221,11 +221,10 @@ describe('Ropex', () => {
           .mapEntries(entry => ({ ...entry, data: 'test' }))
           .done(),
       ).toEqual(expectedState);
-      });
     });
   });
 
-  describe('.remove()', () => {
+  describe('RopexIndex.remove()', () => {
     it('Should remove the index and apply the garbage collector', () => {
       const inputState: RopexState<Entry, string> = {
         ...baseState,
@@ -244,6 +243,112 @@ describe('Ropex', () => {
           .remove()
           .done(),
       ).toEqual(expectedState);
+    });
+  });
+
+  describe('RopexStore.gc()', () => {
+    it('Should remove unused entries', () => {
+      const state: RopexState<Entry, string> = {
+        entries: {
+          a: { id: 'a', data: 'test' },
+          b: { id: 'b', data: 'test' },
+          e: { id: 'e', data: '' },
+        },
+        drafts: {
+          d: { id: 'd', data: 'test' },
+          c: { id: 'c', data: 'test' },
+          e: { id: 'e', data: 'test' },
+        },
+        indexes: {
+          index: {
+            meta: {},
+            keys: ['a', 'c', 'e'],
+          },
+        },
+      };
+      expect(
+        ropex(state)
+          .gc()
+          .done(),
+      ).toEqual({
+        entries: {
+          a: { id: 'a', data: 'test' },
+        },
+        drafts: {
+          c: { id: 'c', data: 'test' },
+          e: { id: 'e', data: 'test' },
+        },
+        indexes: {
+          index: {
+            meta: {},
+            keys: ['a', 'c', 'e'],
+          },
+        },
+      });
+    });
+  });
+
+  describe('RopexStore.setEntry()', () => {
+    it('Should update an existing entry in the store (and discard the draft)', () => {
+      expect(
+        ropex(baseState)
+          .setEntry(
+            {
+              id: 'b',
+              data: 'test',
+            },
+            'id',
+          )
+          .done(),
+      ).toEqual({
+        ...baseState,
+        entries: {
+          ...baseState.entries,
+          b: { id: 'b', data: 'test' },
+        },
+        drafts: {},
+      });
+    });
+
+    it("Shouldn't add an entry that's not in an index", () => {
+      expect(
+        ropex(baseState)
+          .setEntry({ id: 'e', data: 'test' }, 'id')
+          .done(),
+      ).toEqual(baseState);
+    });
+  });
+
+  describe('RopexStore.mapEntry()', () => {
+    it('Should apply map function to entry and add result as draft', () => {
+      expect(
+        ropex(baseState).mapEntry('a', entry => ({
+          ...entry,
+          data: 'test',
+        })),
+      ).toEqual({
+        ...baseState,
+        drafts: {
+          ...baseState.drafts,
+          a: { id: 'a', data: 'test' },
+        },
+      });
+    });
+  });
+  describe('RopexStore.mapEntries()', () => {
+    it('Should apply map function to every entry and add result as draft', () => {
+      expect(
+        ropex(baseState).mapEntries(entry => ({
+          ...entry,
+          data: 'test',
+        })),
+      ).toEqual({
+        ...baseState,
+        drafts: {
+          a: { id: 'a', data: 'test' },
+          b: { id: 'b', data: 'test' },
+        },
+      });
     });
   });
 });
