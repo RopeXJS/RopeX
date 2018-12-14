@@ -11,7 +11,9 @@ import { RopexStore } from './RopexStore';
  */
 export function ropex<E extends object, K extends EntryKey>(
   state: RopexState<E, K>,
-): RopexStore<E, K> {}
+): RopexStore<E, K> {
+  return new RopexStore<E, K>(state);
+}
 
 export namespace ropex {
   /**
