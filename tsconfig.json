@@ -4,6 +4,7 @@
         "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
         "experimentalDecorators": true,
+        "declaration": true,
         "baseUrl": ".",
         "forceConsistentCasingInFileNames": true,
         "lib": ["es5", "es6", "es7", "es2017"],
