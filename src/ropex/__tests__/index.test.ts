@@ -191,18 +191,36 @@ describe('Ropex', () => {
   });
 
   describe('.mapEntries()', () => {
-    it('Should update all entries and add them to the state as drafts', () => {
-      expect(
-        ropex(baseState)
-          .index('index')
-          .mapEntries(entry => ({ ...entry, data: 'test' }))
-          .done(),
-      ).toEqual({
+    it('Should update all entries in the index and add them to the state as drafts', () => {
+      const state = {
         ...baseState,
+        entries: {
+          ...baseState.entries,
+          c: { id: 'c', data: 'test' },
+        },
+        indexes: {
+          index: baseState.indexes.index,
+          other: {
+            meta: {},
+            keys: ['c'],
+          },
+        },
+      };
+
+      const expectedState = {
+        ...state,
         drafts: {
           a: { id: 'a', data: 'test' },
           b: { id: 'b', data: 'test' },
         },
+      };
+
+      expect(
+        ropex<Entry, string>(state)
+          .index('index')
+          .mapEntries(entry => ({ ...entry, data: 'test' }))
+          .done(),
+      ).toEqual(expectedState);
       });
     });
   });
