@@ -35,8 +35,18 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param key The meta-data field to look up
    * @param defaultVal Default value for the meta-data
    */
-  public getMetaData<T>(key: string, defaultVal?: T): T {
-    return defaultVal as T;
+  public getMetaData<T>(key: string): T | undefined;
+  public getMetaData<T>(key: string, defaultVal: T): T;
+  public getMetaData<T>(key: string, defaultVal?: T): T | undefined {
+    if (key in this.indexState.meta) {
+      return this.indexState.meta[key];
+    }
+
+    if (typeof defaultVal === 'undefined') {
+      return;
+    }
+
+    return defaultVal;
   }
 
   // Setters

@@ -31,7 +31,7 @@ describe('RopexIndex', () => {
       expect(
         ropex(state)
           .index('index')
-          .getMetaData('test'),
+          .getMetaData('attr'),
       ).toEqual('test');
     });
 
