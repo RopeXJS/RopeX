@@ -4,7 +4,7 @@
         "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
         "experimentalDecorators": true,
-        "baseUrl": "src",
+        "baseUrl": ".",
         "forceConsistentCasingInFileNames": true,
         "lib": ["dom", "es5", "es6", "es7", "es2017"],
         "module": "esnext",
