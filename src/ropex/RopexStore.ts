@@ -45,5 +45,10 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
   /**
    * Run the garbage collector
    */
-  public gc(): RopexStore {}
+  /**
+   * Remove an index from the state
+   *
+   * @param index The name of the index to remove
+   */
+  public remove(index: string): RopexStore<Entry, K> {}
 }
