@@ -9,7 +9,7 @@ describe('Ropex', () => {
     });
   });
 
-  it('Should leave ordinal state untouched', () => {
+  it('Should leave original state untouched', () => {
     const stateCopy = JSON.parse(JSON.stringify(baseState));
 
     ropex(baseState)
