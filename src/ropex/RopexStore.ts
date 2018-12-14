@@ -89,6 +89,9 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * @param index The name of the index to remove
    */
   public remove(index: string): RopexStore<Entry, K> {
+    delete this.newState.indexes[index];
+
+    // No need to run the garbage collector, that will be ran once at the end
     return this;
   }
 }
