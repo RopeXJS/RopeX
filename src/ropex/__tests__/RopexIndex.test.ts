@@ -3,6 +3,23 @@ import { ropex } from '..';
 import { RopexState } from '../types';
 
 describe('RopexIndex', () => {
+  it("Should create indexes that don't exist", () => {
+    expect(
+      ropex(ropex.empty())
+        .index('index')
+        .done(),
+    ).toEqual({
+      entries: {},
+      drafts: {},
+      indexes: {
+        index: {
+          meta: {},
+          keys: [],
+        },
+      },
+    });
+  });
+
   // getters
   describe('.getAll()', () => {
     it('Should get all entries in the index (merging in drafts)', () => {
