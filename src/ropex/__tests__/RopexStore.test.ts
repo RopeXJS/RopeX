@@ -112,7 +112,11 @@ describe('RopexStore', () => {
 
   describe('.remove()', () => {
     it('Should remove an index from the state', () => {
-      expect(ropex(baseState).remove('index')).toEqual(ropex.empty());
+      expect(
+        ropex(baseState)
+          .remove('index')
+          .done(),
+      ).toEqual(ropex.empty());
     });
   });
 });
