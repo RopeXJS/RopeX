@@ -30,6 +30,7 @@ describe('RopexStore', () => {
       ).toEqual({
         entries: {
           a: { id: 'a', data: 'test' },
+          e: { id: 'e', data: '' },
         },
         drafts: {
           c: { id: 'c', data: 'test' },
