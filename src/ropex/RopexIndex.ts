@@ -122,6 +122,10 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param map Function to map an entry to another entry
    */
   public mapEntries(map: (entry: Entry) => Entry): RopexIndex<Entry, K> {
+    for (const key of this.indexState.keys) {
+      this.ropexStore.mapEntry(key, map);
+    }
+
     return this;
   }
 
