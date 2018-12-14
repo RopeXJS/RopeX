@@ -71,11 +71,10 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * @param key The key of the entry to apply the map function to
    * @param map Function to map an entry to another entry
    */
-  public mapEntry(
-    key: EntryKey,
-    map: (entry: Entry) => Entry,
-  ): RopexStore<Entry, K> {
-    this.newState.drafts[key] = map(this.newState.entries[key]);
+  public mapEntry(key: K, map: (entry: Entry) => Entry): RopexStore<Entry, K> {
+    const entry = this.getEntry(key);
+
+    this.newState.drafts[key] = map(entry as Entry);
 
     return this;
   }
@@ -86,7 +85,7 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * @param map Function to map an entry to another entry
    */
   public mapEntries(map: (entry: Entry) => Entry): RopexStore<Entry, K> {
-    for (const [key, entry] of Object.entries(this.newState.entries)) {
+    for (const [key, entry] of Object.entries(this.getEntries())) {
       this.newState.drafts[key] = map(entry as Entry);
     }
 

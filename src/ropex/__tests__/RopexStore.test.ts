@@ -94,6 +94,20 @@ describe('RopexStore', () => {
         },
       });
     });
+
+    it('Should apply map function on drafts', () => {
+      expect(
+        ropex(baseState)
+          .mapEntry('b', entry => ({ ...entry, data: entry.data + '_updated' }))
+          .done(),
+      ).toEqual({
+        ...baseState,
+        drafts: {
+          ...baseState.drafts,
+          b: { id: 'b', data: 'entry_b_draft_updated' },
+        },
+      });
+    });
   });
   describe('.mapEntries()', () => {
     it('Should apply map function to every entry and add result as draft', () => {
@@ -109,6 +123,23 @@ describe('RopexStore', () => {
         drafts: {
           a: { id: 'a', data: 'test' },
           b: { id: 'b', data: 'test' },
+        },
+      });
+    });
+
+    it('Should apply map function on drafts', () => {
+      expect(
+        ropex(baseState)
+          .mapEntries(entry => ({
+            ...entry,
+            data: entry.data + '_updated',
+          }))
+          .done(),
+      ).toEqual({
+        ...baseState,
+        drafts: {
+          a: { id: 'a', data: 'entry_a_updated' },
+          b: { id: 'b', data: 'entry_b_draft_updated' },
         },
       });
     });
