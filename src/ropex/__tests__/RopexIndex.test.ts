@@ -128,7 +128,7 @@ describe('RopexIndex', () => {
   describe('.addEntry()', () => {
     it('Should add a specific entry to the index', () => {
       expect(
-        ropex<Entry, string>({ ...baseState, entries: {}, indexes: {} })
+        ropex<Entry, string>(ropex.empty())
           .index('index')
           .addEntry(entries[0], 'id')
           .done(),
@@ -136,6 +136,28 @@ describe('RopexIndex', () => {
         entries: { a: entries[0] },
         indexes: { index: { meta: {}, keys: ['a'] } },
         drafts: {},
+      });
+    });
+
+    it("Shouldn't add duplicate keys", () => {
+      expect(
+        ropex<Entry, string>({
+          ...baseState,
+          entries: {},
+          indexes: {
+            index: {
+              meta: {},
+              keys: ['b'],
+            },
+          },
+        })
+          .index('index')
+          .addEntry(entries[0], 'id')
+          .done(),
+      ).toEqual({
+        ...baseState,
+        entries: { a: entries[0] },
+        indexes: { index: { meta: {}, keys: ['b', 'a'] } },
       });
     });
   });
