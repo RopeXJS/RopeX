@@ -111,11 +111,15 @@ describe('RopexIndex', () => {
   describe('.addEntry()', () => {
     it('Should add a specific entry to the index', () => {
       expect(
-        ropex<Entry, string>({ ...baseState, entries: {} })
+        ropex<Entry, string>({ ...baseState, entries: {}, indexes: {} })
           .index('index')
           .addEntry(entries[0], 'id')
           .done(),
-      ).toEqual({ ...baseState, entries: { a: entries[0] } });
+      ).toEqual({
+        entries: { a: entries[0] },
+        indexes: { index: { meta: {}, keys: ['a'] } },
+        drafts: {},
+      });
     });
   });
 

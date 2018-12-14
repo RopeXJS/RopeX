@@ -102,6 +102,9 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param keyField What field on the object to use as the key
    */
   public addEntry(entry: Entry, keyField: string): RopexIndex<Entry, K> {
+    this.indexState.keys.push(entry[keyField]);
+    this.ropexStore.setEntry(entry, keyField);
+
     return this;
   }
 
