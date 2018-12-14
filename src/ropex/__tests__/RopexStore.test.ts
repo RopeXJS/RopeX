@@ -123,4 +123,47 @@ describe('RopexStore', () => {
       ).toEqual(ropex.empty());
     });
   });
+
+  describe('.getEntry()', () => {
+    it('Should get entry by key', () => {
+      expect(ropex(baseState).getEntry('a')).toEqual({
+        id: 'a',
+        data: 'entry_a',
+      });
+    });
+
+    it('Should get draft entry by key', () => {
+      expect(ropex(baseState).getEntry('b')).toEqual({
+        id: 'b',
+        data: 'entry_b_draft',
+      });
+    });
+  });
+
+  describe('.getEntries()', () => {
+    it('Should get all entries and drafts', () => {
+      expect(
+        ropex<Entry, string>({
+          ...baseState,
+          drafts: {
+            ...baseState.drafts,
+            c: { id: 'c', data: 'test' },
+          },
+        }).getEntries(),
+      ).toEqual({
+        a: {
+          id: 'a',
+          data: 'entry_a',
+        },
+        b: {
+          id: 'b',
+          data: 'entry_b_draft',
+        },
+        c: {
+          id: 'c',
+          data: 'test',
+        },
+      });
+    });
+  });
 });

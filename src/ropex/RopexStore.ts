@@ -45,6 +45,27 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
   }
 
   /**
+   * Lookup an entry in the store by key
+   *
+   * Will give precedence to drafts
+   *
+   * @param key Entry key to lookup
+   */
+  public getEntry(key: K): Entry | undefined {
+    return this.newState.drafts[key] || this.newState.entries[key];
+  }
+
+  /**
+   * Return all the entries in the store (merging in drafts)
+   *
+   * @param key Entry key to lookup
+   */
+  public getEntries(): Record<K, Entry> {
+    // See: https://stackoverflow.com/a/51193091/4103890
+    return Object.assign({}, this.newState.entries, this.newState.drafts);
+  }
+
+  /**
    * Apply a map function to an entry
    *
    * @param key The key of the entry to apply the map function to
