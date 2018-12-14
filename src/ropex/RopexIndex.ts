@@ -1,8 +1,12 @@
-import { EntryKey, RopexState } from './types';
+import { EntryKey, RopexState, RopexStateIndex } from './types';
 import { RopexStore } from './RopexStore';
 
 export class RopexIndex<Entry extends object, K extends EntryKey> {
-  constructor(private readonly ropexStore: RopexStore<Entry, K>) {}
+  constructor(
+    private readonly ropexStore: RopexStore<Entry, K>,
+    private readonly indexName: string,
+    private readonly indexState: RopexStateIndex<Entry, K>,
+  ) {}
 
   // Getters
 
@@ -94,10 +98,21 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param key The key of the entry to apply the map function to
    * @param map Function to map an entry to another entry
    */
-  public mapEntry(
-    key: EntryKey,
-    map: (entry: Entry) => Entry,
-  ): RopexIndex<Entry, K> {
+  public mapEntry(key: K, map: (entry: Entry) => Entry): RopexIndex<Entry, K> {
+    if (!this.indexState.keys.includes(key)) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn(
+          `Trying to map entry with key "${key}" that's not in index "${
+            this.indexName
+          }"`,
+        );
+      }
+
+      return this;
+    }
+
+    this.ropexStore.mapEntry(key, map);
+
     return this;
   }
 
@@ -132,6 +147,6 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * Remove this index and return the parent {@link RopexStore}
    */
   public remove(): RopexStore<Entry, K> {
-    return this.ropexStore;
+    return this.ropexStore.remove(this.indexName);
   }
 }

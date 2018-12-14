@@ -14,7 +14,10 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * @param key The key of the index to lookup
    */
   public index(key: string): RopexIndex<Entry, K> {
-    return new RopexIndex<Entry, K>(this);
+    const index = this.newState.indexes[key] || { meta: {}, keys: [] };
+    this.newState.indexes[key] = index;
+
+    return new RopexIndex<Entry, K>(this, key, index);
   }
 
   /**

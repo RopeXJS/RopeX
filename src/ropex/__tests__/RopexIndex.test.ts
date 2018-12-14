@@ -157,6 +157,26 @@ describe('RopexIndex', () => {
         },
       });
     });
+
+    it("Shouldn't update the entry if it's not in the index", () => {
+      const state = {
+        ...baseState,
+        drafts: { c: { id: 'c', data: 'test' } },
+        indexes: {
+          ...baseState.indexes,
+          test: {
+            meta: {},
+            keys: ['c'],
+          },
+        },
+      };
+      expect(
+        ropex(state)
+          .index('index')
+          .mapEntry('c', entry => ({ ...entry, data: 'test' }))
+          .done(),
+      ).toEqual(state);
+    });
   });
 
   describe('.mapEntries()', () => {
