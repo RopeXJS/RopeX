@@ -234,4 +234,26 @@ describe('RopexIndex', () => {
       ).toEqual(expectedState);
     });
   });
+
+  describe('.index()', () => {
+    it('Should return a sibling index', () => {
+      const state = {
+        ...baseState,
+        indexes: {
+          ...baseState.indexes,
+          test: {
+            meta: {},
+            keys: ['a'],
+          },
+        },
+      };
+
+      expect(
+        ropex(state)
+          .index('index')
+          .index('test')
+          .getAll(),
+      ).toEqual([{ id: 'a', data: 'entry_a' }]);
+    });
+  });
 });

@@ -146,8 +146,8 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    *
    * @param key The key of the index to lookup
    */
-  public index(key: K): RopexIndex<Entry, K> {
-    return this;
+  public index(key: string): RopexIndex<Entry, K> {
+    return this.ropexStore.index(key);
   }
 
   /**
