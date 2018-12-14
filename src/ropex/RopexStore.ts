@@ -35,6 +35,12 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * @param keyField What field on the object to use as the key
    */
   public setEntry(entry: Entry, keyField: string): RopexStore<Entry, K> {
+    const key = entry[keyField];
+
+    this.newState.entries[key] = entry;
+
+    delete this.newState.drafts[key];
+
     return this;
   }
 
@@ -48,15 +54,21 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
     key: EntryKey,
     map: (entry: Entry) => Entry,
   ): RopexStore<Entry, K> {
+    this.newState.drafts[key] = map(this.newState.entries[key]);
+
     return this;
   }
 
   /**
-   * Apply a map function to every entry in the store
+   * Apply a map function to every entry in the store and safe the results as drafts
    *
    * @param map Function to map an entry to another entry
    */
   public mapEntries(map: (entry: Entry) => Entry): RopexStore<Entry, K> {
+    for (const [key, entry] of Object.entries(this.newState.entries)) {
+      this.newState.drafts[key] = map(entry as Entry);
+    }
+
     return this;
   }
 
