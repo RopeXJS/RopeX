@@ -14,7 +14,17 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * Get all the entries in this index
    */
   public getAll(): Entry[] {
-    return [];
+    const result: Entry[] = [];
+
+    for (const key of this.indexState.keys) {
+      const entry = this.ropexStore.getEntry(key);
+
+      if (entry) {
+        result.push(entry);
+      }
+    }
+
+    return result;
   }
 
   /**
