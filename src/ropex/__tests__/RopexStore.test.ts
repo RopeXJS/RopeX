@@ -3,7 +3,6 @@ import { baseState, Entry } from './utils';
 import { RopexState } from '../types';
 
 describe('RopexStore', () => {
-  describe('RopexStore.gc()', () => {
   describe('.gc()', () => {
     it('Should remove unused entries', () => {
       const state: RopexState<Entry, string> = {
@@ -46,7 +45,6 @@ describe('RopexStore', () => {
     });
   });
 
-  describe('RopexStore.setEntry()', () => {
   describe('.setEntry()', () => {
     it('Should update an existing entry in the store (and discard the draft)', () => {
       expect(
@@ -78,7 +76,6 @@ describe('RopexStore', () => {
     });
   });
 
-  describe('RopexStore.mapEntry()', () => {
   describe('.mapEntry()', () => {
     it('Should apply map function to entry and add result as draft', () => {
       expect(
@@ -95,7 +92,6 @@ describe('RopexStore', () => {
       });
     });
   });
-  describe('RopexStore.mapEntries()', () => {
   describe('.mapEntries()', () => {
     it('Should apply map function to every entry and add result as draft', () => {
       expect(
