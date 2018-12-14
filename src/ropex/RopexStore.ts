@@ -21,6 +21,7 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * Complete the current transaction and return the new state
    */
   public done(): RopexState<Entry, K> {
+    this.gc();
     return this.newState;
   }
 
