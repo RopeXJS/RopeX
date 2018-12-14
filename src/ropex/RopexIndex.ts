@@ -109,6 +109,7 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * @param value what to set the meta-data field as
    */
   public setMetaData<T>(key: string, value: T): RopexIndex<Entry, K> {
+    this.indexState.meta[key] = value;
     return this;
   }
 
