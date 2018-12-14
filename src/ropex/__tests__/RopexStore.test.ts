@@ -80,10 +80,12 @@ describe('RopexStore', () => {
   describe('.mapEntry()', () => {
     it('Should apply map function to entry and add result as draft', () => {
       expect(
-        ropex(baseState).mapEntry('a', entry => ({
-          ...entry,
-          data: 'test',
-        })),
+        ropex(baseState)
+          .mapEntry('a', entry => ({
+            ...entry,
+            data: 'test',
+          }))
+          .done(),
       ).toEqual({
         ...baseState,
         drafts: {
@@ -96,10 +98,12 @@ describe('RopexStore', () => {
   describe('.mapEntries()', () => {
     it('Should apply map function to every entry and add result as draft', () => {
       expect(
-        ropex(baseState).mapEntries(entry => ({
-          ...entry,
-          data: 'test',
-        })),
+        ropex(baseState)
+          .mapEntries(entry => ({
+            ...entry,
+            data: 'test',
+          }))
+          .done(),
       ).toEqual({
         ...baseState,
         drafts: {
