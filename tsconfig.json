@@ -6,6 +6,7 @@
         "experimentalDecorators": true,
         "baseUrl": ".",
         "forceConsistentCasingInFileNames": true,
+        "lib": ["es5", "es6", "es7", "es2017"],
         "module": "commonjs",
         "moduleResolution": "node",
         "noImplicitReturns": true,
