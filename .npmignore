@@ -1,0 +1,7 @@
+src/
+docs/
+commitlint.config.js
+node_modules/
+tsconfig.*
+jest.config.js
+yarn*
