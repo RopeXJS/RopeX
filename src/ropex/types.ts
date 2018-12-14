@@ -6,12 +6,12 @@ export type EntryKey = string | number;
 /**
  * Individual index in the state
  */
-export type RopexStateIndex<M> = {
+export type RopexStateIndex<M, K> = {
   /** Meta data for this index */
   meta: M;
 
   /** List of all the entry keys */
-  keys: EntryKey[];
+  keys: K[];
 };
 
 /**
@@ -25,5 +25,5 @@ export type RopexState<E extends object, K extends EntryKey = string> = {
   drafts: Record<K, E>;
 
   /** All the indexes */
-  indexes: Record<string, RopexStateIndex<any>>;
+  indexes: Record<string, RopexStateIndex<any, K>>;
 };
