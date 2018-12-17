@@ -15,6 +15,7 @@ export function ropex<E extends object, K extends EntryKey>(
   return new RopexStore<E, K>(state);
 }
 
+// tslint:disable-next-line:no-namespace
 export namespace ropex {
   /**
    * Create an empty ropex state
