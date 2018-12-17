@@ -27,3 +27,16 @@ export type RopexState<E extends object, K extends EntryKey = string> = {
   /** All the indexes */
   indexes: Record<string, RopexStateIndex<any, K>>;
 };
+
+/**
+ * Function to map an entry to another entry
+ */
+export type EntryMap<E> = (entry: E) => E;
+
+/**
+ * Options that can be passed to many RopeX functions
+ */
+export type RopexOptions = {
+  /** If true, will set the entries as drafts. Otherwise update the entries */
+  draft: boolean;
+};

@@ -220,6 +220,27 @@ describe('RopexIndex', () => {
           .done(),
       ).toEqual(state);
     });
+
+    it('Should update entries if draft is false', () => {
+      expect(
+        ropex({ ...baseState, drafts: {} })
+          .index('index')
+          .mapEntry('b', entry => ({ ...entry, data: 'test' }), {
+            draft: false,
+          })
+          .done(),
+      ).toEqual({
+        ...baseState,
+        entries: {
+          ...baseState.entries,
+          b: {
+            id: 'b',
+            data: 'test',
+          },
+        },
+        drafts: {},
+      });
+    });
   });
 
   describe('.mapEntries()', () => {
@@ -251,6 +272,34 @@ describe('RopexIndex', () => {
         ropex<Entry, string>(state)
           .index('index')
           .mapEntries(entry => ({ ...entry, data: 'test' }))
+          .done(),
+      ).toEqual(expectedState);
+    });
+
+    it('Should wipe the drafts and save as entries if draft is false', () => {
+      const state = {
+        ...baseState,
+        entries: { ...baseState.entries, c: { id: 'c', data: 'test' } },
+        indexes: {
+          index: baseState.indexes.index,
+          other: { meta: {}, keys: ['c'] },
+        },
+      };
+
+      const expectedState = {
+        ...state,
+        drafts: {},
+        entries: {
+          ...state.entries,
+          a: { id: 'a', data: 'test' },
+          b: { id: 'b', data: 'test' },
+        },
+      };
+
+      expect(
+        ropex<Entry, string>(state)
+          .index('index')
+          .mapEntries(entry => ({ ...entry, data: 'test' }), { draft: false })
           .done(),
       ).toEqual(expectedState);
     });

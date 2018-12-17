@@ -1,4 +1,10 @@
-import { EntryKey, RopexState, RopexStateIndex } from './types';
+import {
+  EntryKey,
+  RopexState,
+  RopexStateIndex,
+  RopexOptions,
+  EntryMap,
+} from './types';
 import { RopexStore } from './RopexStore';
 
 export class RopexIndex<Entry extends object, K extends EntryKey> {
@@ -144,13 +150,18 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    *
    * @param key The key of the entry to apply the map function to
    * @param map Function to map an entry to another entry
+   * @param options Optional config for how to apply the map
    */
-  public mapEntry(key: K, map: (entry: Entry) => Entry): RopexIndex<Entry, K> {
+  public mapEntry(
+    key: K,
+    map: EntryMap<Entry>,
+    options?: RopexOptions,
+  ): RopexIndex<Entry, K> {
     if (!this.checkEntryInIndex(key)) {
       return this;
     }
 
-    this.ropexStore.mapEntry(key, map);
+    this.ropexStore.mapEntry(key, map, options);
 
     return this;
   }
@@ -159,10 +170,14 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
    * Apply a map function to every entry in the index
    *
    * @param map Function to map an entry to another entry
+   * @param options Optional config for how to apply the map
    */
-  public mapEntries(map: (entry: Entry) => Entry): RopexIndex<Entry, K> {
+  public mapEntries(
+    map: EntryMap<Entry>,
+    options?: RopexOptions,
+  ): RopexIndex<Entry, K> {
     for (const key of this.indexState.keys) {
-      this.ropexStore.mapEntry(key, map);
+      this.ropexStore.mapEntry(key, map, options);
     }
 
     return this;

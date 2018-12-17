@@ -108,6 +108,28 @@ describe('RopexStore', () => {
         },
       });
     });
+
+    it('Should update the entries and clear the drafts if the option is set', () => {
+      expect(
+        ropex(baseState)
+          .mapEntry(
+            'b',
+            entry => ({
+              ...entry,
+              data: entry.data + '_updated',
+            }),
+            { draft: false },
+          )
+          .done(),
+      ).toEqual({
+        ...baseState,
+        entries: {
+          ...baseState.entries,
+          b: { id: 'b', data: 'entry_b_draft_updated' },
+        },
+        drafts: {},
+      });
+    });
   });
   describe('.mapEntries()', () => {
     it('Should apply map function to every entry and add result as draft', () => {
@@ -141,6 +163,21 @@ describe('RopexStore', () => {
           a: { id: 'a', data: 'entry_a_updated' },
           b: { id: 'b', data: 'entry_b_draft_updated' },
         },
+      });
+    });
+
+    it('Should update entries and clear drafts if draft is false', () => {
+      expect(
+        ropex(baseState)
+          .mapEntries(entry => ({ ...entry, data: 'test' }), { draft: false })
+          .done(),
+      ).toEqual({
+        ...baseState,
+        entries: {
+          a: { id: 'a', data: 'test' },
+          b: { id: 'b', data: 'test' },
+        },
+        drafts: {},
       });
     });
   });

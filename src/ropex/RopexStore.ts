@@ -1,4 +1,4 @@
-import { EntryKey, RopexState } from './types';
+import { EntryKey, RopexState, EntryMap, RopexOptions } from './types';
 import { RopexIndex } from './RopexIndex';
 
 export class RopexStore<Entry extends object, K extends EntryKey> {
@@ -73,11 +73,23 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    *
    * @param key The key of the entry to apply the map function to
    * @param map Function to map an entry to another entry
+   * @param options Optional config for how to apply the map
    */
-  public mapEntry(key: K, map: (entry: Entry) => Entry): RopexStore<Entry, K> {
+  public mapEntry(
+    key: K,
+    map: EntryMap<Entry>,
+    options?: RopexOptions,
+  ): RopexStore<Entry, K> {
     const entry = this.getEntry(key);
 
-    this.newState.drafts[key] = map(entry as Entry);
+    const config = options || { draft: true };
+
+    if (config.draft) {
+      this.newState.drafts[key] = map(entry as Entry);
+    } else {
+      this.newState.entries[key] = map(entry as Entry);
+      delete this.newState.drafts[key];
+    }
 
     return this;
   }
@@ -86,10 +98,14 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * Apply a map function to every entry in the store and safe the results as drafts
    *
    * @param map Function to map an entry to another entry
+   * @param options Optional config for how to apply the map
    */
-  public mapEntries(map: (entry: Entry) => Entry): RopexStore<Entry, K> {
-    for (const [key, entry] of Object.entries(this.getEntries())) {
-      this.newState.drafts[key] = map(entry as Entry);
+  public mapEntries(
+    map: EntryMap<Entry>,
+    options?: RopexOptions,
+  ): RopexStore<Entry, K> {
+    for (const key of Object.keys(this.getEntries()) as K[]) {
+      this.mapEntry(key, map, options);
     }
 
     return this;
