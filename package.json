@@ -1,6 +1,6 @@
 {
   "name": "ropex",
-  "version": "1.0.0",
+  "version": "0.2.0",
   "description": "Indexed state manager",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
