@@ -118,6 +118,19 @@ export class RopexIndex<Entry extends object, K extends EntryKey> {
   }
 
   /**
+   * Remove an entry from this index
+   *
+   * If the entry is a draft, the draft will be removed
+   *
+   * @param key The key of the entry to remove
+   */
+  public removeEntry(key: K): RopexIndex<Entry, K> {
+    this.ropexStore.removeEntry(key);
+
+    return this;
+  }
+
+  /**
    * Add new entries to this index
    *
    * If there are any draft entries that have the same key as

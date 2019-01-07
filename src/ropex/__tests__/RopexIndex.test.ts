@@ -162,6 +162,21 @@ describe('RopexIndex', () => {
     });
   });
 
+  describe('.removeEntry()', () => {
+    it('Should remove a specific entry from this index', () => {
+      expect(
+        ropex<Entry, string>(baseState)
+          .index('index')
+          .removeEntry('b')
+          .done(),
+      ).toEqual({
+        entries: { a: entries[0] },
+        indexes: { index: { meta: {}, keys: ['a'] } },
+        drafts: {},
+      });
+    });
+  });
+
   describe('.setMetaData()', () => {
     it('Should set the meta-data field of an index', () => {
       expect(

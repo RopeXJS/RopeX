@@ -44,6 +44,27 @@ describe('RopexStore', () => {
         },
       });
     });
+
+    it("Should remove keys from indexes that don't exist in the store", () => {
+      const state = {
+        ...baseState,
+        entries: { a: baseState.entries.a },
+        drafts: {},
+      };
+
+      const expected = {
+        ...baseState,
+        entries: { a: baseState.entries.a },
+        drafts: {},
+        indexes: { index: { ...baseState.indexes.index, keys: ['a'] } },
+      };
+
+      expect(
+        ropex(state)
+          .gc()
+          .done(),
+      ).toEqual(expected);
+    });
   });
 
   describe('.setEntry()', () => {
@@ -204,6 +225,42 @@ describe('RopexStore', () => {
       expect(ropex(baseState).getEntry('b')).toEqual({
         id: 'b',
         data: 'entry_b_draft',
+      });
+    });
+  });
+
+  describe('.removeEntry()', () => {
+    it('Should remove entries from the store and indexes', () => {
+      expect(
+        ropex(baseState)
+          .removeEntry('a')
+          .done(),
+      ).toEqual({
+        ...baseState,
+        entries: { b: baseState.entries.b },
+        indexes: {
+          index: {
+            ...baseState.indexes.index,
+            keys: ['b'],
+          },
+        },
+      });
+    });
+
+    it('Should remove draft entries', () => {
+      expect(
+        ropex(baseState)
+          .removeEntry('b')
+          .done(),
+      ).toEqual({
+        entries: { a: baseState.entries.a },
+        drafts: {},
+        indexes: {
+          index: {
+            ...baseState.indexes.index,
+            keys: ['a'],
+          },
+        },
       });
     });
   });

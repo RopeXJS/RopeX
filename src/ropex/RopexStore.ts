@@ -48,6 +48,20 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
   }
 
   /**
+   * Remove an entry from the store
+   *
+   * If the entry is a draft, the draft will be removed
+   *
+   * @param key The key of the entry to delete
+   */
+  public removeEntry(key: K): RopexStore<Entry, K> {
+    delete this.newState.entries[key];
+    delete this.newState.drafts[key];
+
+    return this;
+  }
+
+  /**
    * Lookup an entry in the store by key
    *
    * Will give precedence to drafts
@@ -115,19 +129,31 @@ export class RopexStore<Entry extends object, K extends EntryKey> {
    * Run the garbage collector
    */
   public gc(): RopexStore<Entry, K> {
-    const usedEntries = ([] as K[]).concat(
-      ...Object.values(this.newState.indexes).map(index => index.keys),
+    // Entries that are requested by the indexes
+    const requestedEntries = new Set(
+      ([] as K[]).concat(
+        ...Object.values(this.newState.indexes).map(index => index.keys),
+      ),
     );
 
-    for (const key of Object.keys(this.newState.entries)) {
-      if (!usedEntries.includes(key as K)) {
-        delete this.newState.entries[key];
+    // Entries that are in the store
+    const knownEntries = new Set();
+
+    // Clean un-requested entries from the store
+    for (const entries of [this.newState.entries, this.newState.drafts]) {
+      for (const key of Object.keys(entries)) {
+        if (!requestedEntries.has(key as K)) {
+          delete entries[key];
+        } else {
+          knownEntries.add(key);
+        }
       }
     }
 
-    for (const key of Object.keys(this.newState.drafts)) {
-      if (!usedEntries.includes(key as K)) {
-        delete this.newState.drafts[key];
+    // Clean any entries that are requested by an index, but not in the store
+    if (requestedEntries.size > knownEntries.size) {
+      for (const index of Object.values(this.newState.indexes)) {
+        index.keys = index.keys.filter(key => knownEntries.has(key));
       }
     }
 
