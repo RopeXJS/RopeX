@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/RopeXJS/RopeX/compare/v0.3.0...v0.4.0) (2019-01-07)
+
+
+### Features
+
+* add function to remove entries from the store ([59986f0](https://github.com/RopeXJS/RopeX/commit/59986f0))
+
+
+
 <a name="0.3.0"></a>
 # [0.3.0](https://github.com/RopeXJS/RopeX/compare/v0.2.1...v0.3.0) (2018-12-17)
 
